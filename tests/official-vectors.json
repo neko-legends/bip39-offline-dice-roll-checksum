@@ -1,0 +1,22 @@
+{
+  "source": "https://github.com/trezor/python-mnemonic/blob/master/vectors.json",
+  "license": "MIT",
+  "vectors": [
+    {"entropy":"00000000000000000000000000000000","words":12,"mnemonicSha256":"c557eec878dfd852ba3f88087c4f350f09c55537ab5e549c3cd14320ec3cef38"},
+    {"entropy":"7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f","words":12,"mnemonicSha256":"ecb0e7ba498c5920991f0b3483e91f7abafa9ecc6bd82a9a51494589592b1a8f"},
+    {"entropy":"80808080808080808080808080808080","words":12,"mnemonicSha256":"3a64bcd9cea43c0aba67ba0bf2ddff8137a492bccbc672107fcbf7381086f698"},
+    {"entropy":"ffffffffffffffffffffffffffffffff","words":12,"mnemonicSha256":"3c0949435a7e4277fac2fbe27975cdd9f5b5abf94d282112eaf4cebbb8560984"},
+    {"entropy":"0000000000000000000000000000000000000000000000000000000000000000","words":24,"mnemonicSha256":"69be79ef3c28f55d7cb84db2dd3c18dfff45eeefebd09b8c5f7f3489b8ba09ac"},
+    {"entropy":"7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f","words":24,"mnemonicSha256":"3b1c5e02107409ea60548d8d8f686fd8d722791f3618deb1f9eb1e9f5c02cd35"},
+    {"entropy":"8080808080808080808080808080808080808080808080808080808080808080","words":24,"mnemonicSha256":"a5fe1cb4158ffd2a27ae93b5ac617903504c3ec9d8f6ac9737ecc207cb460e72"},
+    {"entropy":"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff","words":24,"mnemonicSha256":"e96bfc1d78867126dadff72e64807301e9bb837bcf329c86976647e529520528"},
+    {"entropy":"9e885d952ad362caeb4efe34a8e91bd2","words":12,"mnemonicSha256":"d6da54d12db9eac818868b841c1c9cc7c39f5294c8620ad24b7715b7820febc0"},
+    {"entropy":"68a79eaca2324873eacc50cb9c6eca8cc68ea5d936f98787c60c7ebc74e6ce7c","words":24,"mnemonicSha256":"341c225b06c91708aa82ab8389075a8227fda76fb2b9cae2d445e36ca8c44da1"},
+    {"entropy":"c0ba5a8e914111210f2bd131f3d5e08d","words":12,"mnemonicSha256":"6d828debd306e21a02511899832f7ee5591de0693b2f2bd78967fb1e09bafdbb"},
+    {"entropy":"9f6a2878b2520799a44ef18bc7df394e7061a224d2c33cd015b157d746869863","words":24,"mnemonicSha256":"30452ba5605dd25289bc2ae7b1883a53b1cece62e2331fa105b88c9682dd37c7"},
+    {"entropy":"23db8160a31d3e0dca3688ed941adbf3","words":12,"mnemonicSha256":"b2e71100d10bee74156b69806498a2e3d90e432160c2e266465ba669a220d50b"},
+    {"entropy":"066dca1a2bb7e8a1db2832148ce9933eea0f3ac9548d793112d9a95c9407efad","words":24,"mnemonicSha256":"0f388b04e512d7a0eda5889c96ff034cf63499b73898965a8e187e3a8a25d198"},
+    {"entropy":"f30f8c1da665478f49b001d94c5fc452","words":12,"mnemonicSha256":"b1bff22ae077ce1ae482e4dcb01c144ff8a44e97fbb3f3a5f62567f4ac19da7c"},
+    {"entropy":"f585c11aec520db57dd353c69554b21a89b20fb0650966fa0a9d6f74fd989d8f","words":24,"mnemonicSha256":"867f9f5929a7201c1116579e17be6ce501f8a8c5a8d0d1ac7173d72ae78fd945"}
+  ]
+}
