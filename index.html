@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>BIP39 Checksum Word Finder</title>
+  <style>
+    :root {
+      --bg: #030303;
+      --panel: #0b0b0b;
+      --panel-2: #17110a;
+      --text: #fff8ef;
+      --muted: #b8aa9a;
+      --line: #3f2a17;
+      --accent: #f7931a;
+      --accent-dark: #4a2606;
+      --warning: #ffb24d;
+      --danger: #ff8e8e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(247, 147, 26, .16), transparent 34rem),
+        linear-gradient(145deg, #000, var(--bg));
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 56px 0 72px; }
+    header { margin-bottom: 28px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) 220px; align-items: center; gap: 34px; }
+    .brand-logo {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 18px rgba(247, 147, 26, .28));
+    }
+    .eyebrow { color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 8px 0 12px; font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1.03; letter-spacing: -.045em; }
+    header p { max-width: 680px; margin: 0; color: var(--muted); font-size: 1.05rem; }
+
+    .privacy {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 18px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(15, 11, 7, .88);
+      color: #f4dfc7;
+      font-size: .85rem;
+    }
+    .privacy::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+
+    .warning, .tool, .results-panel { border: 1px solid var(--line); border-radius: 18px; background: rgba(11, 11, 11, .94); box-shadow: 0 20px 60px rgba(0, 0, 0, .38); }
+    .warning { margin-bottom: 18px; padding: 16px 18px; border-color: #624019; color: #f2d7b5; }
+    .warning strong { color: var(--warning); }
+    .tool { padding: clamp(18px, 4vw, 30px); }
+
+    label { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 10px; font-weight: 750; }
+    #count { color: var(--muted); font-size: .88rem; font-weight: 600; }
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border: 1px solid #5b3b1b;
+      border-radius: 12px;
+      outline: none;
+      padding: 16px;
+      background: #030303;
+      color: var(--text);
+      font: 1rem/1.75 ui-monospace, SFMono-Regular, Consolas, monospace;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 147, 26, .16); }
+    textarea[aria-invalid="true"] { border-color: var(--danger); }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 16px;
+      background: var(--panel-2);
+      color: var(--text);
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    button:hover { border-color: #8a5621; }
+    button:focus-visible { outline: 3px solid rgba(247, 147, 26, .48); outline-offset: 2px; }
+    .primary { border-color: var(--accent); background: var(--accent); color: #1a0c00; }
+    .primary:hover { background: #ffae45; }
+    .status { min-height: 1.55em; margin: 13px 0 0; color: var(--muted); }
+    .status.error { color: var(--danger); }
+
+    .results-panel { display: none; margin-top: 18px; padding: clamp(18px, 4vw, 30px); }
+    .results-panel.visible { display: block; }
+    .results-panel h2 { margin: 0; font-size: 1.35rem; }
+    .results-panel > p { margin: 6px 0 18px; color: var(--muted); }
+    .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 10px; }
+    .result {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #050505;
+    }
+    .word { font: 700 1.05rem ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .word-wrap { display: grid; gap: 3px; }
+    .recommended { color: var(--accent); font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+    .copy { min-height: 34px; padding: 5px 9px; font-size: .78rem; }
+    footer { margin-top: 22px; color: var(--muted); font-size: .85rem; }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 236px; align-items: start; gap: 18px; }
+    .primary-column { min-width: 0; }
+    .wordlist-panel {
+      position: sticky;
+      top: 18px;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(11, 11, 11, .96);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .38);
+    }
+    .wordlist-header { padding: 15px 16px 12px; border-bottom: 1px solid var(--line); }
+    .wordlist-header h2 { margin: 0; font-size: 1rem; }
+    .wordlist-header p { margin: 2px 0 0; color: var(--muted); font-size: .76rem; }
+    .word-list {
+      height: min(70vh, 670px);
+      margin: 0;
+      padding: 7px 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-gutter: stable;
+      list-style: none;
+      font: .82rem/1.25 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .word-list li {
+      display: grid;
+      grid-template-columns: 4ch minmax(0, 1fr) 28px;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      white-space: nowrap;
+    }
+    .word-list li:hover { background: rgba(247, 147, 26, .09); }
+    .word-number { color: #8f7660; text-align: right; font-variant-numeric: tabular-nums; }
+    .listed-word { min-width: 0; overflow: hidden; color: #f4e7d8; text-overflow: ellipsis; }
+    .add-word {
+      width: 28px;
+      min-height: 28px;
+      padding: 0;
+      border-color: #664019;
+      border-radius: 7px;
+      color: var(--accent);
+      font: 800 1rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .add-word:hover { border-color: var(--accent); background: #241506; }
+    .input-note { margin: -3px 0 10px; color: var(--muted); font-size: .82rem; }
+    .input-note strong { color: #f2d1aa; }
+    .example-warning { margin: 10px 0 0; color: var(--warning); font-size: .78rem; }
+
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+      .wordlist-panel { position: static; }
+      .word-list { height: 340px; }
+    }
+
+    @media (max-width: 700px) {
+      .hero { grid-template-columns: minmax(0, 1fr) 140px; gap: 18px; }
+    }
+
+    @media (max-width: 560px) {
+      main { width: min(100% - 20px, 880px); padding-top: 30px; }
+      .hero { grid-template-columns: 1fr; }
+      .brand-logo { grid-row: 1; width: 132px; margin: 0 auto; }
+      .actions button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Offline BIP39 utility</div>
+        <h1>Find the final word.</h1>
+        <p>Enter 11 or 23 words to find valid endings, or enter a complete 12- or 24-word phrase to verify its final word.</p>
+        <div class="privacy">Runs entirely in this browser — no network requests</div>
+      </div>
+      <img class="brand-logo" src="assets/cat-logo.webp" width="400" height="400" alt="Neon orange circuit-board cat logo">
+    </header>
+
+    <div class="workspace">
+      <div class="primary-column">
+        <aside class="warning">
+          <strong>Security warning:</strong> Do not invent or hand-pick seed words. Human choices are predictable. Use an unbiased dice procedure with enough rolls, preferably on a trusted offline device, and never paste a funded wallet’s phrase into an untrusted computer.
+        </aside>
+
+        <section class="tool" aria-labelledby="input-label">
+          <label id="input-label" for="words">
+            Your BIP39 words
+            <span id="count">0 words</span>
+          </label>
+          <p class="input-note"><strong>Choose how to enter:</strong> use the <b>+</b> buttons in the local word list or type with your keyboard. List selection reduces keyboard entry but cannot protect against screen capture or malware.</p>
+          <textarea id="words" rows="6" spellcheck="false" autocapitalize="none" autocomplete="off" aria-describedby="status" placeholder="abandon ability able …"></textarea>
+          <div class="actions">
+            <button id="find" class="primary" type="button">Find valid final words</button>
+            <button id="sample-12" type="button">Load 11-word example</button>
+            <button id="sample-24" type="button">Load 23-word example</button>
+            <button id="clear" type="button">Clear</button>
+          </div>
+          <p class="example-warning"><strong>Never use example words as a wallet key.</strong> They are public and included only to demonstrate the checksum tool. For this workflow, use physical dice with a documented unbiased method—not a casual online random-word generator.</p>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="results-panel" class="results-panel" aria-labelledby="results-title">
+          <h2 id="results-title">Valid checksum words</h2>
+          <p id="results-description">Any one of these words produces a checksum-valid BIP39 mnemonic.</p>
+          <div id="results" class="results"></div>
+        </section>
+
+        <footer>This verifies BIP39 checksum structure only. It cannot tell whether a phrase is secure, unused, or entered correctly on your hardware wallet.</footer>
+      </div>
+
+      <aside class="wordlist-panel" aria-labelledby="wordlist-title">
+        <div class="wordlist-header">
+          <h2 id="wordlist-title">English word list</h2>
+          <p>Official BIP39 · 1–2048</p>
+        </div>
+        <ol id="word-list" class="word-list" aria-label="Numbered English BIP39 words"></ol>
+      </aside>
+    </div>
+  </main>
+
+  <script src="bip39-wordlist.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
