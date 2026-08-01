@@ -166,23 +166,6 @@ function findValidFinalWords(words) {
   return valid;
 }
 
-async function copyPhrase(phrase, button) {
-  try {
-    await navigator.clipboard.writeText(phrase);
-  } catch {
-    const helper = document.createElement("textarea");
-    helper.value = phrase;
-    helper.style.position = "fixed";
-    helper.style.opacity = "0";
-    document.body.append(helper);
-    helper.select();
-    document.execCommand("copy");
-    helper.remove();
-  }
-  button.textContent = "Copied";
-  window.setTimeout(() => { button.textContent = "Copy phrase"; }, 1300);
-}
-
 function renderResults(prefix, validWords, suppliedFinalWord = "") {
   results.replaceChildren();
   const suppliedIsValid = suppliedFinalWord && validWords.includes(suppliedFinalWord);
@@ -220,12 +203,7 @@ function renderResults(prefix, validWords, suppliedFinalWord = "") {
       note.textContent = suppliedIsValid ? "Current word" : "Preserves dice entropy";
       wordWrap.append(note);
     }
-    const copy = document.createElement("button");
-    copy.className = "copy";
-    copy.type = "button";
-    copy.textContent = "Copy phrase";
-    copy.addEventListener("click", () => copyPhrase(`${prefix.join(" ")} ${word}`, copy));
-    card.append(wordWrap, copy);
+    card.append(wordWrap);
     results.append(card);
   }
   resultsPanel.classList.add("visible");
