@@ -4,6 +4,8 @@ This tool helps you finish or check a 12-word or 24-word BIP39 seed phrase made 
 
 It runs entirely in your browser. You do not need to install anything, start a server, or connect to the internet.
 
+The app does not read from the clipboard or copy anything to it. Your words stay in the page's memory until you clear or close the page.
+
 ![The BIP39 Offline Dice-Roll Checksum tool with its black and orange design, seed phrase box, and numbered word list](assets/app-screenshot.webp)
 
 ## Why this tool exists
